@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { modifyTheme } from '@/utils';
+import { modifyTheme, locSetItem, locRemoveItem } from '@/utils';
 import { THEME_TYPES, IMG_THEME_TYPES } from '@/constant';
 
 const currentTheme = ref<string>('');
@@ -48,9 +48,11 @@ const currentTheme = ref<string>('');
 const changeTheme = (key: string) => {
   currentTheme.value = key;
   modifyTheme(key);
-  // key为freshGreen时，说明选择的是默认主题，此时把存储在store中的主题设置清除
+  // key为freshGreen时，说明选择的是默认主题，此时把存储在storage中的主题设置清除
   if (key === 'freshGreen') {
-    // removeTheme();
+    locRemoveItem('theme');
+  } else {
+    locSetItem('theme', key);
   }
 };
 </script>

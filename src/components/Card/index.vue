@@ -25,12 +25,6 @@
             {{ data.abstract }}
           </div>
         </div>
-        <ContentMenu
-          v-show="commonStore.showContextmenu && commonStore.currentArticleId === data.id"
-          :data="data"
-          :on-open-new-window="onOpenNewWindow"
-          :to-detail="toDetail"
-        />
       </div>
       <div class="card-bottom">
         <slot>
@@ -80,14 +74,12 @@
 </template>
 
 <script setup lang="ts">
-// import { ipcRenderer } from 'electron';
 import { useRouter, useRoute } from 'vue-router';
 import { formatDate, chackIsDelete } from '@/utils';
 import { ArticleItem } from '@/typings/common';
 import { IMG1 } from '@/constant';
 import { commonStore, loginStore } from '@/store';
 import Image from '@/components/Image/index.vue';
-import ContentMenu from '@/components/ContentMenu/index.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -135,19 +127,6 @@ const onMouseDown = async (e: MouseEvent, data: ArticleItem) => {
     commonStore.showContextmenu = true;
     commonStore.currentArticleId = data.id;
   }
-};
-
-// 新窗口打开
-const onOpenNewWindow = (data: ArticleItem) => {
-  // const { userInfo, token } = loginStore;
-  // ipcRenderer.send(
-  //   'new-win',
-  //   `article/${data.id}?from=${route.name as string}`,
-  //   data.id, // articleId
-  //   JSON.stringify({ userInfo, token }), // 用户信息
-  // );
-  // 清除右键菜单选项
-  commonStore.clearContentmenuInfo();
 };
 
 // 当前页打开
