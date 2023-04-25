@@ -7,7 +7,11 @@
 <template>
   <div class="multibar-wrap">
     <div class="action like-wrap" @click="likeArticle">
-      <i :class="`like-font iconfont ${articleStore?.articleDetail?.isLike && 'is-like'} icon-24gf-thumbsUp2`" />
+      <i
+        :class="`like-font iconfont ${
+          (articleStore?.articleDetail?.isLike || articleStore?.articleLikeStatus) && 'is-like'
+        } icon-24gf-thumbsUp2`"
+      />
       <span v-if="articleStore?.detailArtLikeCount > 0" class="count">
         {{
           articleStore?.detailArtLikeCount > 999
@@ -102,6 +106,7 @@ const commentCount = useCommentCount;
 onMounted(() => {
   // 获取收藏状态
   collectStore?.getCollectStatus(props.id);
+  articleStore.checkArticleLikeStatus(props.id);
 });
 
 // 文章点赞
@@ -140,6 +145,7 @@ const onCollect = () => {
 .multibar-wrap {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
   .action {
     position: relative;
     flex: 1;

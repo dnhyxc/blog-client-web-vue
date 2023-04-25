@@ -91,11 +91,11 @@
 
 <script setup lang="ts">
 // import { ipcRenderer } from 'electron';
-import { onMounted, onUnmounted, nextTick, ref, inject, watchEffect } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, onUnmounted, nextTick, ref, watchEffect } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useScroller } from '@/hooks';
 import { articleStore, commonStore } from '@/store';
-import { scrollTo, checkOS, locSetItem, locRemoveItem, getStoreUserInfo } from '@/utils';
+import { scrollTo, checkOS, getStoreUserInfo } from '@/utils';
 import { ACTION_SVGS } from '@/constant';
 import { createWebSocket } from '@/socket';
 import PageHeader from '@/components/PreviewHeader/index.vue';
@@ -107,10 +107,8 @@ import AnotherArticle from '@/components/AnotherArticle/index.vue';
 import Comment from '@/components/Comment/index.vue';
 import Loading from '@/components/Loading/index.vue';
 
-const reload = inject<Function>('reload');
-
 const route = useRoute();
-// const router = useRouter();
+const router = useRouter();
 
 const articleInfoRef = ref<HTMLDivElement | null>(null);
 
@@ -146,7 +144,7 @@ onMounted(async () => {
     commonStore.detailScrollRef = scrollRef.value;
   });
 
-  await articleStore.getArticleDetail(route.params.id as string);
+  await articleStore.getArticleDetail({ id: route.params.id as string, router });
   // 在详情获取成功后，如果路由路径中携带了scrollTo参数，则说明是从列表中点击评论进来的，需要跳转到评论
   if (route.query?.scrollTo) {
     onScrollTo(articleInfoRef.value?.offsetHeight);
@@ -200,7 +198,7 @@ const updateFocus = (value: boolean) => {
 
 // 置顶
 const onSticky = () => {
-  const { id } = route.params;
+  // const { id } = route.params;
   stickyStatus.value = !stickyStatus.value;
   // ipcRenderer.send('new-win-show', stickyStatus.value, id);
 };
@@ -223,7 +221,7 @@ const onDblclick = () => {
 
 // 点击右侧窗口控制按钮
 const onClick = (item: { title: string; svg: string }) => {
-  const { id } = route.params;
+  // const { id } = route.params;
 
   if (item.title === '最大化') {
     toggle.value = !toggle.value;
@@ -442,6 +440,10 @@ const onScrollTo = (height?: number) => {
         box-sizing: border-box;
         flex: 1;
         background-color: var(--e-form-bg-color);
+      }
+
+      & > :last-child {
+        margin-bottom: 0;
       }
     }
   }

@@ -139,7 +139,7 @@ const onMouseDown = async (e: MouseEvent, data: ArticleItem) => {
 
 // 新窗口打开
 const onOpenNewWindow = (data: ArticleItem) => {
-  const { userInfo, token } = loginStore;
+  // const { userInfo, token } = loginStore;
   // ipcRenderer.send(
   //   'new-win',
   //   `article/${data.id}?from=${route.name as string}`,
@@ -183,7 +183,7 @@ const toTag = (name: string) => {
   align-items: center;
   flex-wrap: wrap;
   border-radius: 5px;
-  box-shadow: 0 0 8px 0 var(--shadow-mack);
+  box-shadow: 0 0 8px 0 var(--card-shadow);
 
   .card {
     position: relative;

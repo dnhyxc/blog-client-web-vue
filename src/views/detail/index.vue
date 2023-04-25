@@ -60,7 +60,7 @@
 
 <script setup lang="ts">
 // import { ipcRenderer } from 'electron';
-import { onMounted, onUnmounted, nextTick, ref, inject } from 'vue';
+import { onMounted, onUnmounted, nextTick, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useScroller } from '@/hooks';
@@ -74,8 +74,6 @@ import ToTopIcon from '@/components/ToTopIcon/index.vue';
 import AnotherArticle from '@/components/AnotherArticle/index.vue';
 import Comment from '@/components/Comment/index.vue';
 import Loading from '@/components/Loading/index.vue';
-
-const reload = inject<Function>('reload');
 
 const router = useRouter();
 const route = useRoute();
@@ -92,7 +90,7 @@ onMounted(async () => {
   nextTick(() => {
     commonStore.detailScrollRef = scrollRef.value;
   });
-  await articleStore.getArticleDetail(route.params.id as string);
+  await articleStore.getArticleDetail({ id: route.params.id as string, router });
   // 在详情获取成功后，如果路由路径中携带了scrollTo参数，则说明是从列表中点击评论进来的，需要跳转到评论
   if (route.query?.scrollTo) {
     onScrollTo(articleInfoRef.value?.offsetHeight);
@@ -235,6 +233,10 @@ const onScrollTo = (height?: number) => {
       box-sizing: border-box;
       flex: 1;
       background-color: var(--e-form-bg-color);
+    }
+
+    & > :last-child {
+      margin-bottom: 0;
     }
   }
 }
