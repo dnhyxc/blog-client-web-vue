@@ -252,12 +252,6 @@ export const SETTING_MENU = [
     show: false,
   },
   {
-    name: '系统设置',
-    key: 'system',
-    path: '/system',
-    show: true,
-  },
-  {
     name: '主题设置',
     key: 'theme',
     path: '/theme',

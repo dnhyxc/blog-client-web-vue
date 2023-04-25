@@ -150,15 +150,6 @@ const routes: Array<RouteRecordRaw> = [
             },
             component: () => import('@/views/setting/theme/index.vue'),
           },
-          {
-            path: '/system',
-            name: 'system',
-            meta: {
-              title: '系统设置',
-              keepAlive: false,
-            },
-            component: () => import('@/views/setting/system/index.vue'),
-          },
         ],
         redirect: { name: 'profile' },
       },

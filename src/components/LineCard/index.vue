@@ -50,19 +50,12 @@
         <div class="img-wrap">
           <Image :url="data.coverImage || IMG1" :transition-img="IMG1" class="img" />
         </div>
-        <ContentMenu
-          v-show="commonStore.showContextmenu && commonStore.currentArticleId === data.id"
-          :data="data"
-          :on-open-new-window="onOpenNewWindow"
-          :to-detail="toDetail"
-        />
       </slot>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// import { ipcRenderer } from 'electron';
 import { useRouter, useRoute } from 'vue-router';
 import { IMG1 } from '@/constant';
 import { chackIsDelete } from '@/utils';
@@ -140,7 +133,6 @@ const toDetail = async (data: ArticleItem | TimelineArticles) => {
 const onComment = async (data: ArticleItem | TimelineArticles) => {
   await chackIsDelete(data as ArticleItem);
   router.push(`/detail/${data?.id}?scrollTo=1`);
-  // ipcRenderer.send('new-win', `article/${data.id}?scrollTo=1&from=${route.name as string}`, data.id);
 };
 
 // 监听鼠标右键，分别进行不同的操作
@@ -150,18 +142,6 @@ const onMouseDown = async (e: MouseEvent, data: ArticleItem | TimelineArticles) 
     commonStore.showContextmenu = true;
     commonStore.currentArticleId = data.id!;
   }
-};
-
-// 新窗口打开
-const onOpenNewWindow = async (data: ArticleItem) => {
-  await chackIsDelete(data as ArticleItem);
-  const { userInfo, token } = loginStore;
-  // ipcRenderer.send(
-  //   'new-win',
-  //   `article/${data.id}?from=${route.name as string}`,
-  //   data.id,
-  //   JSON.stringify({ userInfo, token }),
-  // );
 };
 </script>
 

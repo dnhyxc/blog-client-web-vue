@@ -107,9 +107,7 @@
 </template>
 
 <script setup lang="ts">
-// import { ipcRenderer, shell } from 'electron';
-import { ref, onMounted, computed, inject } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
 import { ElMessage } from 'element-plus';
 import { HEAD_IMG, AUTHOR_TABS, IMG1 } from '@/constant';
 import { authorStore, articleStore } from '@/store';
@@ -122,9 +120,6 @@ import Loading from '@/components/Loading/index.vue';
 import Empty from '@/components/Empty/index.vue';
 import { ArticleItem } from '@/typings/common';
 
-const reload = inject<Function>('reload');
-
-const route = useRoute();
 const { scrollRef, scrollTop } = useScroller();
 
 const viewMore = ref<boolean>(false);
@@ -148,13 +143,6 @@ const showEmpty = computed(() => {
 const { deleteArticle } = useDeleteArticle({ pageType: 'author' });
 
 onMounted(async () => {
-  // 监听详情点赞状态，实时更改列表对应文章的点赞状态
-  // ipcRenderer.on('refresh', (_, id, pageType, isLike = true) => {
-  //   // 需要判断是否是属于当前活动页面，并且只是点击点赞而不是收藏或评论防止重复触发
-  //   if (route.name === 'author' && pageType !== 'list' && isLike) {
-  //     reload && reload();
-  //   }
-  // });
   // 防止页面加载报错
   isMounted.value = true;
   // 重置选中tab key 为 0

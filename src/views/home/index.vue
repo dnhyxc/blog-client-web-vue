@@ -41,9 +41,7 @@
 </template>
 
 <script setup lang="ts">
-// import { ipcRenderer } from 'electron';
-import { ref, computed, onMounted, onUnmounted, watch, inject } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { ATRICLE_TYPE } from '@/constant';
 import { scrollTo } from '@/utils';
 import { useScroller, useDeleteArticle } from '@/hooks';
@@ -53,8 +51,6 @@ import Card from '@/components/Card/index.vue';
 import ToTopIcon from '@/components/ToTopIcon/index.vue';
 import Empty from '@/components/Empty/index.vue';
 import { ArticleItem } from '@/typings/common';
-
-const reload = inject<Function>('reload');
 
 const searchType = ref<number>(1); // 1：推荐，2：最新，3：最热
 const isMounted = ref<boolean>(false);
@@ -66,7 +62,6 @@ const noMore = computed(() => {
 const disabled = computed(() => articleStore.loading || noMore.value);
 
 const { scrollRef, scrollTop } = useScroller();
-const route = useRoute();
 
 const { deleteArticle } = useDeleteArticle({ pageType: 'home' });
 
@@ -74,13 +69,6 @@ onMounted(() => {
   isMounted.value = true;
   articleStore.getArticleByRandom();
   onFetchData();
-  // 监听详情点赞状态，实时更改列表对应文章的点赞状态
-  // ipcRenderer.on('refresh', (_, id, pageType, isLike = true) => {
-  //   // 需要判断是否是属于当前活动页面，并且只是点击点赞而不是收藏或评论防止重复触发
-  //   if (route.name === 'home' && pageType !== 'list' && isLike) {
-  //     reload && reload();
-  //   }
-  // });
 });
 
 // 监听页面搜索关键词，请求列表数据
