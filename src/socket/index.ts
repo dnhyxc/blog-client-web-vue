@@ -1,5 +1,5 @@
-import { messageStore } from '@/store';
-import { locGetItem, getStoreUserInfo } from '@/utils';
+import { messageStore, loginStore } from '@/store';
+import { locGetItem, getStoreUserInfo, locRemoveItem } from '@/utils';
 import { DOMAIN_URL } from '@/constant';
 
 export let ws: any;
@@ -141,6 +141,14 @@ function onMessage(event: any) {
           if (messageStore.visible) {
             messageStore.addMessage(parseData.data);
           }
+        }
+        // 收到后台推送的退出登录通知
+        if (parseData.action === 'logout' && (loginStore?.token || loginStore?.userInfo?.userId)) {
+          loginStore.token = '';
+          loginStore.userInfo = {};
+          locRemoveItem('token');
+          locRemoveItem('userInfo');
+          loginStore.logoutStatus = true;
         }
       }
     } else {
